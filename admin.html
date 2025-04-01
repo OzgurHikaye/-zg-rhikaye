@@ -36,7 +36,7 @@
             if (user) {
                 // Giriş yapan kullanıcıyı al
                 var currentUser = user.email;
-                
+
                 // Adminler listesinde kontrol et
                 db.collection("admins").doc(currentUser).get()
                     .then(function(doc) {
@@ -52,7 +52,7 @@
                         console.log("Admin kontrolü yapılırken hata: ", error);
                     });
             } else {
-                // Eğer kullanıcı giriş yapmamışsa, giriş sayfasına yönlendir
+                // Eğer kullanıcı giriş yapmamışsa, login sayfasına yönlendir
                 window.location.href = "login.html";
             }
         });
