@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Girişi</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <h1>Admin Girişi</h1>
+    <form id="loginForm">
+        <label for="email">E-posta:</label>
+        <input type="email" id="email" required><br>
+        <label for="password">Şifre:</label>
+        <input type="password" id="password" required><br>
+        <button type="submit">Giriş Yap</button>
+    </form>
+
+    <script>
+        // Firebase yapılandırma
+        var firebaseConfig = {
+            apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
+            authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
+            projectId: "ozgurhikaye-fafdb",
+            storageBucket: "ozgurhikaye-fafdb.appspot.com",
+            messagingSenderId: "304465207545",
+            appId: "1:304465207545:web:73c35623338f08e27a0228"
+        };
+
+        // Firebase'i başlat
+        firebase.initializeApp(firebaseConfig);
+        var auth = firebase.auth();
+
+        // Giriş işlemi
+        document.getElementById("loginForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(function(userCredential) {
+                    var user = userCredential.user;
+                    // Admin girişi başarılıysa admin paneline yönlendir
+                    window.location.href = "admin.html";
+                })
+                .catch(function(error) {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    alert("Giriş başarısız: " + errorMessage);
+                });
+        });
+    </script>
+</body>
+</html>
