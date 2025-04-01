@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <h1>Admin Paneli</h1>
+    <div id="bekleyen-hikayeler">
+        <h2>Bekleyen Hikayeler</h2>
+        <ul id="hikayeListesi"></ul>
+    </div>
+
+    <script>
+        // Firebase Yapılandırması
+        var firebaseConfig = {
+            apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
+            authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
+            projectId: "ozgurhikaye-fafdb",
+            storageBucket: "ozgurhikaye-fafdb.appspot.com",
+            messagingSenderId: "304465207545",
+            appId: "1:304465207545:web:73c35623338f08e27a0228"
+        };
+
+        // Firebase'i başlat
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        // Bekleyen hikayeleri çekme ve onay/ret işlemleri
+        db.collection("stories")
+          .where("status", "==", "pending")  // Sadece "bekleyen" statüsündeki hikayeleri al
+          .get()
+          .then(function(querySnapshot) {
+            var hikayeListesi = document.getElementById('hikayeListesi');
+            querySnapshot.forEach(function(doc) {
+                var li = document.createElement('li');
+                li.textContent = doc.data().baslik + ": " + doc.data().hikaye;
+                
+                // Onayla ve reddet butonları ekleyelim
+                var onaylaButton = document.createElement('button');
+                onaylaButton.textContent = "Onayla";
+                onaylaButton.onclick = function() {
+                    onaylaHikaye(doc.id);  // Hikayeyi onayla
+                };
+
+                var reddetButton = document.createElement('button');
+                reddetButton.textContent = "Reddet";
+                reddetButton.onclick = function() {
+                    reddetHikaye(doc.id);  // Hikayeyi reddet
+                };
+
+                li.appendChild(onaylaButton);
+                li.appendChild(reddetButton);
+                hikayeListesi.appendChild(li);
+            });
+          })
+          .catch(function(error) {
+            console.log("Hikayeler alınırken hata oluştu: ", error);
+          });
+
+        // Hikayeyi onaylama fonksiyonu
+        function onaylaHikaye(hikayeId) {
+            db.collection("stories").doc(hikayeId).update({
+                status: "published"  // Hikayenin statüsünü "published" olarak güncelle
+            })
+            .then(function() {
+                alert("Hikaye onaylandı!");
+                location.reload();  // Sayfayı yenileyerek yeni durumu göster
+            })
+            .catch(function(error) {
+                console.error("Hikaye onaylanırken hata oluştu: ", error);
+            });
+        }
+
+        // Hikayeyi reddetme fonksiyonu
+        function reddetHikaye(hikayeId) {
+            db.collection("stories").doc(hikayeId).delete()
+            .then(function() {
+                alert("Hikaye reddedildi!");
+                location.reload();  // Sayfayı yenileyerek yeni durumu göster
+            })
+            .catch(function(error) {
+                console.error("Hikaye reddedilirken hata oluştu: ", error);
+            });
+        }
+    </script>
+</body>
+</html>
