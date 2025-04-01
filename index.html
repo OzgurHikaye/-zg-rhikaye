@@ -27,7 +27,7 @@
 <body>
     <div class="container">
         <h1>Özgür Hikaye</h1>
-        <p>Anonim hikayelerin özgürce paylaşılabildiği bir platform.</p>
+        <p>Anonim hikayelerinn özgürce paylaşılabildiği bir platform.</p>
         <h2>Hikayeni Gönder</h2>
         <form id="storyForm">
             <input type="text" id="baslik" placeholder="Hikaye Başlığı" required>
@@ -39,15 +39,14 @@
     <script>
         // Firebase Config
         const firebaseConfig = {
-            apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
-            authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
-            databaseURL: "https://ozgurhikaye-fafdb-default-rtdb.firebaseio.com",
-            projectId: "ozgurhikaye-fafdb",
-            storageBucket: "ozgurhikaye-fafdb.firebasestorage.app",
-            messagingSenderId: "304465207545",
-            appId: "1:304465207545:web:73c35623338f08e27a0228"
+          apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
+          authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
+          databaseURL: "https://ozgurhikaye-fafdb-default-rtdb.firebaseio.com",
+          projectId: "ozgurhikaye-fafdb",
+          storageBucket: "ozgurhikaye-fafdb.firebasestorage.app",
+          messagingSenderId: "304465207545",
+          appId: "1:304465207545:web:993b9e2d3b80ca587a0228"
         };
-
         // Firebase'i başlat
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore(app);
