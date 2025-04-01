@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Özgür Hikaye</title>
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
+    <!-- Firebase SDK (ESKİ SÜRÜM - V8) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
         body {
@@ -40,7 +40,7 @@
 
     <script>
         // Firebase Yapılandırması
-        const firebaseConfig = {
+        var firebaseConfig = {
             apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
             authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
             projectId: "ozgurhikaye-fafdb",
@@ -51,26 +51,17 @@
 
         // Firebase'i başlat
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        var db = firebase.firestore();
 
         // Formu dinle ve Firestore'a ekle
         document.getElementById('storyForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Sayfa yenilenmesini engeller
 
-            const baslik = document.getElementById('baslik').value;
-            const hikaye = document.getElementById('hikaye').value;
+            var baslik = document.getElementById('baslik').value;
+            var hikaye = document.getElementById('hikaye').value;
 
             db.collection('stories').add({
                 baslik: baslik,
                 hikaye: hikaye,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                alert('Hikaye başarıyla gönderildi!');
-                document.getElementById('storyForm').reset();
-            }).catch(error => {
-                console.error('Hikaye gönderilemedi:', error);
-            });
-        });
-    </script>
-</body>
-</html>
+            }).then
