@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Özgür Hikaye - Yönetim Paneli</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .story {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        h1, h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Özgür Hikaye - Yönetim Paneli</h1>
+        <h2>Gönderilen Hikayeler</h2>
+        <div id="storyList"></div> <!-- Hikayelerin listeleneceği yer -->
+    </div>
+
+    <script>
+        // Firebase yapılandırması
+        const firebaseConfig = {
+            apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
+            authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
+            databaseURL: "https://ozgurhikaye-fafdb-default-rtdb.firebaseio.com",
+            projectId: "ozgurhikaye-fafdb",
+            storageBucket: "ozgurhikaye-fafdb.firebasestorage.app",
+            messagingSenderId: "304465207545",
+            appId: "1:304465207545:web:73c35623338f08e27a0228"
+        };
+
+        // Firebase'i başlat
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(app);
+
+        // Hikayeleri çekme fonksiyonu
+        async function getStories() {
+            try {
+                const querySnapshot = await db.collection("stories").orderBy("timestamp", "desc").get();
+                const storyList = document.getElementById("storyList");
+                storyList.innerHTML = ""; // Önceki hikayeleri temizle
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const storyElement = document.createElement("div");
+                    storyElement.classList.add("story");
+                    storyElement.innerHTML = `
+                        <h3>${data.title}</h3>
+                        <p>${data.content}</p>
+                        <p><small>${data.timestamp.toDate().toLocaleString()}</small></p>
+                    `;
+                    storyList.appendChild(storyElement);
+                });
+            } catch (e) {
+                console.error("Hikayeler alınırken hata oluştu: ", e);
+            }
+        }
+
+        // Sayfa yüklendiğinde hikayeleri getir
+        window.onload = getStories;
+    </script>
+</body>
+</html>
