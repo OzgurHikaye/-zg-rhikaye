@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Özgür Hikaye</title>
+    
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,7 +29,7 @@
 <body>
     <div class="container">
         <h1>Özgür Hikaye</h1>
-        <p>Anonim hikayelerinn özgürce paylaşılabildiği bir platform.</p>
+        <p>Anonim hikayelerin özgürce paylaşılabildiği bir platform.</p>
         <h2>Hikayeni Gönder</h2>
         <form id="storyForm">
             <input type="text" id="baslik" placeholder="Hikaye Başlığı" required>
@@ -37,35 +39,33 @@
     </div>
 
     <script>
-        // Firebase Config
+        // Firebase Yapılandırması
         const firebaseConfig = {
-          apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
-          authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
-          databaseURL: "https://ozgurhikaye-fafdb-default-rtdb.firebaseio.com",
-          projectId: "ozgurhikaye-fafdb",
-          storageBucket: "ozgurhikaye-fafdb.firebasestorage.app",
-          messagingSenderId: "304465207545",
-          appId: "1:304465207545:web:993b9e2d3b80ca587a0228"
+            apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
+            authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
+            projectId: "ozgurhikaye-fafdb",
+            storageBucket: "ozgurhikaye-fafdb.appspot.com",
+            messagingSenderId: "304465207545",
+            appId: "1:304465207545:web:73c35623338f08e27a0228"
         };
-        // Firebase'i başlat
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(app);
 
-        // Formu gönderme işlemi
+        // Firebase'i başlat
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Formu dinle ve Firestore'a ekle
         document.getElementById('storyForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Sayfa yenilenmesini engeller
 
             const baslik = document.getElementById('baslik').value;
             const hikaye = document.getElementById('hikaye').value;
 
-            // Firestore'a ekleyelim
             db.collection('stories').add({
                 baslik: baslik,
                 hikaye: hikaye,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()  // Bu doğru kullanım
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 alert('Hikaye başarıyla gönderildi!');
-                // Formu sıfırlayalım
                 document.getElementById('storyForm').reset();
             }).catch(error => {
                 console.error('Hikaye gönderilemedi:', error);
