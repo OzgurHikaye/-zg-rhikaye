@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Özgür Hikaye</title>
@@ -27,11 +31,54 @@
         <p>Anonim hikayelerin özgürce paylaşılabildiği bir platform.</p>
         
         <h2>Hikayeni Gönder</h2>
-        <form action="mailto:ozgurhikaye@protonmail.com" method="post" enctype="text/plain">
-            <input type="text" name="baslik" placeholder="Hikaye Başlığı" required>
-            <textarea name="hikaye" placeholder="Hikayeni buraya yaz..." rows="6" required></textarea>
+        <form id="storyForm">
+            <input type="text" id="storyTitle" placeholder="Hikaye Başlığı" required>
+            <textarea id="storyContent" placeholder="Hikayeni buraya yaz..." rows="6" required></textarea>
             <button type="submit">Gönder</button>
         </form>
     </div>
+
+    <script>
+        // Firebase yapılandırması
+        const firebaseConfig = {
+            apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
+            authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
+            databaseURL: "https://ozgurhikaye-fafdb-default-rtdb.firebaseio.com",
+            projectId: "ozgurhikaye-fafdb",
+            storageBucket: "ozgurhikaye-fafdb.firebasestorage.app",
+            messagingSenderId: "304465207545",
+            appId: "1:304465207545:web:73c35623338f08e27a0228"
+        };
+
+        // Firebase'i başlat
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(app);
+
+        // Hikaye ekleme fonksiyonu
+        async function addStory(title, storyContent) {
+            try {
+                const docRef = await firebase.firestore().collection("stories").add({
+                    title: title,
+                    content: storyContent,
+                    timestamp: new Date(),
+                });
+                console.log("Hikaye başarıyla eklendi: ", docRef.id);
+                alert("Hikaye başarıyla gönderildi.");
+                // Formu sıfırla
+                document.getElementById("storyForm").reset();
+            } catch (e) {
+                console.error("Hikaye eklenirken bir hata oluştu: ", e);
+                alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+            }
+        }
+
+        // Formu gönderme işlemi
+        document.getElementById("storyForm").addEventListener("submit", (e) => {
+            e.preventDefault(); // Sayfa yeniden yüklenmesini engeller
+            const title = document.getElementById("storyTitle").value;
+            const content = document.getElementById("storyContent").value;
+            addStory(title, content); // Hikaye ekleme fonksiyonunu çağır
+        });
+    </script>
 </body>
 </html>
