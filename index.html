@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Özgür Hikaye</title>
-
-    <!-- Firebase SDK (ESKİ SÜRÜM - V8) -->
+    
+    <!-- Firebase SDK v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
@@ -29,17 +29,21 @@
 <body>
     <div class="container">
         <h1>Özgür Hikaye</h1>
-        <p>Anonim hikayelerin özgürce paylaşılabildiği bir platform.</p>
+        <p>Anonim hikayelerin özgürce paylaşıldığı bir platform.</p>
+        
+        <!-- Hikaye Formu -->
         <h2>Hikayeni Gönder</h2>
         <form id="storyForm">
             <input type="text" id="baslik" placeholder="Hikaye Başlığı" required>
             <textarea id="hikaye" placeholder="Hikayeni buraya yaz..." rows="6" required></textarea>
             <button type="submit">Gönder</button>
         </form>
+
+        <h2>Hikayeler</h2>
+        <div id="storiesContainer"></div> <!-- Hikayeleri göstereceğiz -->
     </div>
 
     <script>
-        // Firebase Yapılandırması
         // Firebase Yapılandırması
         var firebaseConfig = {
             apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
@@ -49,28 +53,44 @@
             messagingSenderId: "304465207545",
             appId: "1:304465207545:web:73c35623338f08e27a0228"
         };
-        
+
         // Firebase'i başlat
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
-        
-        // Formu dinle ve Firestore'a ekle
+
+        // Hikaye ekleme
         document.getElementById('storyForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Sayfa yenilenmesini engeller
-        
+            event.preventDefault(); // Sayfa yenilenmesini engelle
+
             var baslik = document.getElementById('baslik').value;
             var hikaye = document.getElementById('hikaye').value;
-        
+
             // Firestore'a veri ekle
             db.collection('stories').add({
                 baslik: baslik,
                 hikaye: hikaye,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(function() {
-                alert('Hikaye başarıyla gönderildi!');
-                // Formu sıfırlama
+                console.log("Hikaye başarıyla eklendi!");
+                // Formu temizle
                 document.getElementById('storyForm').reset();
             }).catch(function(error) {
-                console.error('Hikaye gönderilemedi:', error);
+                console.error("Hikaye eklenirken hata oluştu: ", error);
             });
         });
+
+        // Hikayeleri Firestore'dan al ve ekrana yazdır
+        db.collection('stories').orderBy('timestamp', 'desc').onSnapshot(function(querySnapshot) {
+            var storiesContainer = document.getElementById('storiesContainer');
+            storiesContainer.innerHTML = ""; // Önceki hikayeleri temizle
+
+            querySnapshot.forEach(function(doc) {
+                var story = doc.data();
+                var storyElement = document.createElement('div');
+                storyElement.innerHTML = "<h3>" + story.baslik + "</h3><p>" + story.hikaye + "</p><hr>";
+                storiesContainer.appendChild(storyElement);
+            });
+        });
+    </script>
+</body>
+</html>
