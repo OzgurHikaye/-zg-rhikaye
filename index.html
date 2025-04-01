@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -44,50 +45,41 @@
     </div>
 
     <script>
-        // Firebase Yapılandırması
         var firebaseConfig = {
-            apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
+            apiKey: "AIzaSyBO9...",
             authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
             projectId: "ozgurhikaye-fafdb",
             storageBucket: "ozgurhikaye-fafdb.appspot.com",
             messagingSenderId: "304465207545",
             appId: "1:304465207545:web:73c35623338f08e27a0228"
         };
-
-        // Firebase'i başlat
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
 
-        // Hikaye ekleme
         document.getElementById('storyForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Sayfa yenilenmesini engelle
-
+            event.preventDefault();
             var baslik = document.getElementById('baslik').value;
             var hikaye = document.getElementById('hikaye').value;
-
-            // Firestore'a veri ekle
             db.collection('stories').add({
                 baslik: baslik,
                 hikaye: hikaye,
+                status: "pending",
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(function() {
-                console.log("Hikaye başarıyla eklendi!");
-                // Formu temizle
+                alert("Hikaye gönderildi, onay bekleniyor!");
                 document.getElementById('storyForm').reset();
             }).catch(function(error) {
-                console.error("Hikaye eklenirken hata oluştu: ", error);
+                console.error("Hata: ", error);
             });
         });
 
-        // Hikayeleri Firestore'dan al ve ekrana yazdır
-        db.collection('stories').orderBy('timestamp', 'desc').onSnapshot(function(querySnapshot) {
+        db.collection('stories').where("status", "==", "published").orderBy('timestamp', 'desc').onSnapshot(function(querySnapshot) {
             var storiesContainer = document.getElementById('storiesContainer');
-            storiesContainer.innerHTML = ""; // Önceki hikayeleri temizle
-
+            storiesContainer.innerHTML = "";
             querySnapshot.forEach(function(doc) {
                 var story = doc.data();
                 var storyElement = document.createElement('div');
-                storyElement.innerHTML = "<h3>" + story.baslik + "</h3><p>" + story.hikaye + "</p><hr>";
+                storyElement.innerHTML = `<h3>${story.baslik}</h3><p>${story.hikaye}</p><hr>`;
                 storiesContainer.appendChild(storyElement);
             });
         });
