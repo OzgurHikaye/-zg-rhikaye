@@ -40,6 +40,7 @@
 
     <script>
         // Firebase Yapılandırması
+        // Firebase Yapılandırması
         var firebaseConfig = {
             apiKey: "AIzaSyBO9paIXK9xY9jQVy8ld08pXNoUcJHvtQQ",
             authDomain: "ozgurhikaye-fafdb.firebaseapp.com",
@@ -48,20 +49,28 @@
             messagingSenderId: "304465207545",
             appId: "1:304465207545:web:73c35623338f08e27a0228"
         };
-
+        
         // Firebase'i başlat
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
-
+        
         // Formu dinle ve Firestore'a ekle
         document.getElementById('storyForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Sayfa yenilenmesini engeller
-
+        
             var baslik = document.getElementById('baslik').value;
             var hikaye = document.getElementById('hikaye').value;
-
+        
+            // Firestore'a veri ekle
             db.collection('stories').add({
                 baslik: baslik,
                 hikaye: hikaye,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then
+            }).then(function() {
+                alert('Hikaye başarıyla gönderildi!');
+                // Formu sıfırlama
+                document.getElementById('storyForm').reset();
+            }).catch(function(error) {
+                console.error('Hikaye gönderilemedi:', error);
+            });
+        });
