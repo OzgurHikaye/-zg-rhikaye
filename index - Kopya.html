@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Özgür Hikaye</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Özgür Hikaye</h1>
+        <p>Anonim hikayelerin özgürce paylaşılabildiği bir platform.</p>
+        
+        <h2>Hikayeni Gönder</h2>
+        <form action="mailto:seninprotonmailin@protonmail.com" method="post" enctype="text/plain">
+            <input type="text" name="baslik" placeholder="Hikaye Başlığı" required>
+            <textarea name="hikaye" placeholder="Hikayeni buraya yaz..." rows="6" required></textarea>
+            <button type="submit">Gönder</button>
+        </form>
+    </div>
+</body>
+</html>
