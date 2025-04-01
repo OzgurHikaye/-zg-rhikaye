@@ -63,7 +63,7 @@
             db.collection('stories').add({
                 baslik: baslik,
                 hikaye: hikaye,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()  // Bu doğru kullanım
             }).then(() => {
                 alert('Hikaye başarıyla gönderildi!');
                 // Formu sıfırlayalım
